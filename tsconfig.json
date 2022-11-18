@@ -1,0 +1,26 @@
+{
+    "extends": "@doist/tsconfig",
+    "compilerOptions": {
+        "target": "es2017",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "react",
+        "declaration": true,
+        "removeComments": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "sourceMap": true,
+        "incremental": true,
+        "noUncheckedIndexedAccess": false,
+        "outDir": "./dist",
+        "baseUrl": "./src",
+        "module": "commonjs"
+    },
+    "include": ["src", "test"]
+}

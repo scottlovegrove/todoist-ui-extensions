@@ -1,0 +1,43 @@
+{
+    "name": "todoist-ui-extensions",
+    "version": "1.0.0",
+    "description": "UI Extension function",
+    "main": "index.js",
+    "scripts": {
+        "format-check": "npx prettier --check .",
+        "format-fix": "npx prettier --write .",
+        "ts-compile-check": "tsc --noEmit",
+        "build": "npm run clean && npx tsc -p tsconfig.build.json",
+        "test": "jest --passWithNoTests",
+        "clean": "rimraf dist"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/scottisafool/ui-extension-function.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@doist/eslint-config": "^7.5.0",
+        "@doist/prettier-config": "^3.0.5",
+        "@doist/tsconfig": "1.0.0",
+        "@types/crypto-js": "^4.1.1",
+        "@types/jest": "^27.4.1",
+        "@types/node": "^14.18.33",
+        "eslint": "8.27.0",
+        "eslint-config-prettier": "8.5.0",
+        "jest": "^27.5.1",
+        "prettier": "^2.7.1",
+        "rimraf": "^3.0.2",
+        "ts-jest": "^27.1.4",
+        "ts-loader": "^9.2.8",
+        "tslib": "^2.3.1",
+        "typescript": "^4.9.3"
+    },
+    "dependencies": {
+        "@doist/ui-extensions-core": "^3.3.0",
+        "@netlify/functions": "^1.0.0",
+        "crypto-js": "^4.1.1"
+    },
+    "prettier": "@doist/prettier-config"
+}
