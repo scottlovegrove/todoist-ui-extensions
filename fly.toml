@@ -4,6 +4,7 @@ app = "todoist-ui-extensions"
 
 [env]
   PORT = "8080"
+  BASE_URL = "https://todoist-ui-extensions.fly.dev"
 
 [[services]]
   internal_port = 8080
