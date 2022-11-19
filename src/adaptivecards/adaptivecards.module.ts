@@ -5,10 +5,12 @@ import {
 
 import { Module } from '@nestjs/common'
 
+import { SnippetModule } from '../snippet/snippet.module'
+
 import { AdaptiveCardsService } from './adaptivecards.service'
 
 @Module({
-    imports: [CoreModule],
+    imports: [CoreModule, SnippetModule],
     providers: [
         AdaptiveCardsService,
         {

@@ -1,5 +1,8 @@
 import {
     ActionSet,
+    ClipboardAction,
+    Container,
+    createTextButton,
     DoistCard,
     SubmitAction,
     TextBlock,
@@ -8,11 +11,14 @@ import {
 import {
     AdaptiveCardService as AdaptiveCardServiceBase,
     pageActions,
+    ThemeService,
+    TranslationService,
 } from '@doist/ui-extensions-server'
 
 import { Injectable } from '@nestjs/common'
 
 import { SnippetCardAction } from '../actions/action.consts'
+import { SnippetService } from '../snippet/snippet.service'
 
 import type { ProjectDataWithCompleted } from '../todoist/todoist.types'
 
@@ -22,6 +28,14 @@ export enum CardInputs {
 
 @Injectable()
 export class AdaptiveCardsService extends AdaptiveCardServiceBase {
+    constructor(
+        private readonly snippetService: SnippetService,
+        translationService: TranslationService,
+        themeService: ThemeService,
+    ) {
+        super(translationService, themeService)
+    }
+
     homeCard(): DoistCard {
         return DoistCard.fromWithItems({
             doistCardVersion: '0.6',
@@ -52,7 +66,27 @@ export class AdaptiveCardsService extends AdaptiveCardServiceBase {
         })
     }
 
-    snippetPreviewCard(_options: { projectData: ProjectDataWithCompleted }): DoistCard {
+    noTasksCard(): DoistCard {
+        return DoistCard.fromWithItems({
+            doistCardVersion: '0.6',
+            items: [
+                TextBlock.from({
+                    text: 'No tasks found',
+                    weight: 'bolder',
+                    horizontalAlignment: 'center',
+                }),
+                createTextButton({
+                    text: 'Try again?',
+                    color: 'attention',
+                    horizontalAlignment: 'center',
+                    id: SnippetCardAction.GenerateSnippet,
+                }),
+            ],
+        })
+    }
+
+    snippetPreviewCard({ projectData }: { projectData: ProjectDataWithCompleted }): DoistCard {
+        const snippet = this.snippetService.createSnippet(projectData)
         return DoistCard.fromWithItems({
             doistCardVersion: '0.6',
             items: [
@@ -60,14 +94,27 @@ export class AdaptiveCardsService extends AdaptiveCardServiceBase {
                     text: 'Snippet preview',
                     weight: 'bolder',
                 }),
-                TextBlock.from({
-                    text: '```',
-                    spacing: 'medium',
+                Container.fromWithItems({
+                    style: 'emphasis',
+                    items: [
+                        TextBlock.from({
+                            text: snippet,
+                            spacing: 'medium',
+                        }),
+                    ],
                 }),
-                TextBlock.from({
-                    text: '```',
-                    spacing: 'medium',
-                }),
+                pageActions(
+                    ActionSet.fromWithActions({
+                        actions: [
+                            ClipboardAction.from({
+                                title: 'Copy to clipboard',
+                                text: snippet,
+                                style: 'positive',
+                            }),
+                        ],
+                    }),
+                    { horizontalAlignment: 'left' },
+                ),
             ],
         })
     }

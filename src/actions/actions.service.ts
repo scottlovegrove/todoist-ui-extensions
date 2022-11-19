@@ -33,6 +33,12 @@ export class ActionsService extends ActionsServiceBase {
     async generateSnippet(request: DoistCardRequest<DoistCardAction>): Promise<DoistCardResponse> {
         const { sourceId: projectId } = request.action.params as TodoistContextMenuData
         const projectData = await this.todoistService.getProjectData(projectId)
+
+        if (projectData.completedTasks.length === 0 && projectData.items.length === 0) {
+            return {
+                card: this.adaptiveCardsService.noTasksCard(),
+            }
+        }
         return {
             card: this.adaptiveCardsService.snippetPreviewCard({ projectData }),
         }
