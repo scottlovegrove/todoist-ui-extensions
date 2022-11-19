@@ -5,6 +5,7 @@ FROM node:18-alpine AS BUILD_IMAGE
 WORKDIR /usr/src/app
 
 COPY . .
+COPY ./prod.env ./.env
 
 RUN npm config set cache /tmp --global
 
