@@ -3,11 +3,12 @@ import { ActionsService as ActionsServiceBase } from '@doist/ui-extensions-serve
 import { Module } from '@nestjs/common'
 
 import { AdaptiveCardsModule } from '../adaptivecards/adaptivecards.module'
+import { TodoistModule } from '../todoist/todoist.module'
 
 import { ActionsService } from './actions.service'
 
 @Module({
-    imports: [AdaptiveCardsModule],
+    imports: [AdaptiveCardsModule, TodoistModule],
     providers: [
         ActionsService,
         {

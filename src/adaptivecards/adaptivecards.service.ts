@@ -14,6 +14,8 @@ import { Injectable } from '@nestjs/common'
 
 import { SnippetCardAction } from '../actions/action.consts'
 
+import type { ProjectDataWithCompleted } from '../todoist/todoist.types'
+
 export enum CardInputs {
     GroupBySection = 'ToggleInput.GroupBySection',
 }
@@ -46,6 +48,26 @@ export class AdaptiveCardsService extends AdaptiveCardServiceBase {
                     }),
                     { horizontalAlignment: 'left' },
                 ),
+            ],
+        })
+    }
+
+    snippetPreviewCard(_options: { projectData: ProjectDataWithCompleted }): DoistCard {
+        return DoistCard.fromWithItems({
+            doistCardVersion: '0.6',
+            items: [
+                TextBlock.from({
+                    text: 'Snippet preview',
+                    weight: 'bolder',
+                }),
+                TextBlock.from({
+                    text: '```',
+                    spacing: 'medium',
+                }),
+                TextBlock.from({
+                    text: '```',
+                    spacing: 'medium',
+                }),
             ],
         })
     }
