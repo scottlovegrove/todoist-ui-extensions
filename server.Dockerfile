@@ -13,8 +13,8 @@ RUN npm config set cache /tmp --global
 
 RUN npm install rimraf -g && \
     npm ci && \
-    npm run build \
-    rimraf ['node_modules']
+    npm run build && \
+    rimraf node_modules
 
 # Install dependencies for production
 RUN npm ci --omit=dev
