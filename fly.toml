@@ -2,6 +2,9 @@
 
 app = "todoist-ui-extensions"
 
+[build]
+  dockerfile = "server.Dockerfile"
+
 [env]
   PORT = "8080"
   BASE_URL = "https://todoist-ui-extensions.fly.dev"
