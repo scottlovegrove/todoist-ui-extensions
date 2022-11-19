@@ -1,0 +1,10 @@
+.vscode
+.idea
+.env
+.env.test
+node_modules/
+dist/
+**/node_modules
+aws/
+.direnv/
+.envrc

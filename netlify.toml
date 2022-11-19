@@ -1,5 +1,0 @@
-[build]
-    functions = "./src/functions"
-
-[functions]
-    included_files = ["./src/images/**/*.*"]
