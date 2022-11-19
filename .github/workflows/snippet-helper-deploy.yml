@@ -1,0 +1,27 @@
+# Your workflow name.
+name: Deploy to Fly.io.
+
+# Run workflow on every push to main branch.
+on:
+    push:
+        branches:
+            - 'main'
+        paths:
+            - './src/**'
+            - server.Dockerfile
+            - 'package.json'
+            - 'package-lock.json'
+            - 'fly.toml'
+            - '.github/workflows/snippet-helper-deploy.yml'
+
+env:
+    FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+jobs:
+    deploy:
+        name: Deploy app
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: superfly/flyctl-actions/setup-flyctl@master
+            - run: flyctl deploy --local-only

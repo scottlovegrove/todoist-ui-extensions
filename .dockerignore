@@ -1,3 +1,7 @@
+Dockerfile
+.dockerignore
+node_modules
+.git
 .vscode
 .idea
 .env
