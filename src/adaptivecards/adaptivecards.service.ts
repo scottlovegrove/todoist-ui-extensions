@@ -3,9 +3,13 @@ import {
     Choice,
     ChoiceSetInput,
     ClipboardAction,
+    Column,
+    ColumnSet,
     Container,
     createTextButton,
     DoistCard,
+    Image,
+    OpenUrlAction,
     SubmitAction,
     TextBlock,
     ToggleInput,
@@ -68,19 +72,36 @@ export class AdaptiveCardsService extends AdaptiveCardServiceBase {
                         Choice.from({ title: 'Four weeks ago', value: '4' }),
                     ],
                 }),
-                pageActions(
-                    ActionSet.fromWithActions({
-                        actions: [
-                            SubmitAction.from({
-                                id: SnippetCardAction.GenerateSnippet,
-                                title: 'Generate snippet',
-                                style: 'positive',
-                                loadingText: 'Generating snippet...',
-                            }),
-                        ],
-                    }),
-                    { horizontalAlignment: 'left' },
-                ),
+                ColumnSet.fromWithColumns({
+                    spacing: 'medium',
+                    columns: [
+                        Column.fromWithItems({
+                            items: [
+                                createTextButton({
+                                    text: 'Help?',
+                                    color: 'attention',
+                                    id: SnippetCardAction.Help,
+                                }),
+                            ],
+                        }),
+                        Column.fromWithItems({
+                            items: [
+                                pageActions(
+                                    ActionSet.fromWithActions({
+                                        actions: [
+                                            SubmitAction.from({
+                                                id: SnippetCardAction.GenerateSnippet,
+                                                title: 'Generate snippet',
+                                                style: 'positive',
+                                                loadingText: 'Generating snippet...',
+                                            }),
+                                        ],
+                                    }),
+                                ),
+                            ],
+                        }),
+                    ],
+                }),
             ],
         })
     }
@@ -145,6 +166,50 @@ export class AdaptiveCardsService extends AdaptiveCardServiceBase {
                     }),
                     { horizontalAlignment: 'left' },
                 ),
+            ],
+        })
+    }
+
+    helpCard(): DoistCard {
+        return DoistCard.fromWithItems({
+            doistCardVersion: '0.6',
+            items: [
+                TextBlock.from({
+                    text: 'Help',
+                    weight: 'bolder',
+                }),
+                TextBlock.from({
+                    text: 'This extension generates a snippet of your completed tasks for the last week.',
+                    spacing: 'medium',
+                    wrap: true,
+                }),
+                TextBlock.from({
+                    text: 'Your tasks can be arranged by section and they can then be displayed by section (click image for bigger preview).',
+                    spacing: 'medium',
+                    wrap: true,
+                }),
+                Image.from({
+                    url: this.createThemeBasedUrl('images/demo-image-{0}.png'),
+                    pixelHeight: 200,
+                    selectAction: OpenUrlAction.from({
+                        url: this.createThemeBasedUrl('/images/demo-image-{0}.png'),
+                    }),
+                }),
+                TextBlock.from({
+                    text: 'The snippet will be copied to your clipboard when you click the "Copy to clipboard" button.',
+                    spacing: 'medium',
+                    wrap: true,
+                }),
+                TextBlock.from({
+                    text: 'You can then paste it into your weekly report.',
+                    spacing: 'medium',
+                    wrap: true,
+                }),
+                createTextButton({
+                    text: 'Go back',
+                    color: 'attention',
+                    id: CardActions.GoHome,
+                }),
             ],
         })
     }

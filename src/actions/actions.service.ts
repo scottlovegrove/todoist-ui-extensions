@@ -49,6 +49,13 @@ export class ActionsService extends ActionsServiceBase {
         }
     }
 
+    @Submit({ actionId: SnippetCardAction.Help })
+    help(): Promise<DoistCardResponse> {
+        return Promise.resolve({
+            card: this.adaptiveCardsService.helpCard(),
+        })
+    }
+
     private getOptions(
         request: DoistCardRequest<DoistCardAction>,
     ): SnippetOptions & { weeksAgo: number } {
