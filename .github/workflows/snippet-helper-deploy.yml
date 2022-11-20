@@ -7,7 +7,7 @@ on:
         branches:
             - 'main'
         paths:
-            - './src/**'
+            - 'src/**'
             - server.Dockerfile
             - 'package.json'
             - 'package-lock.json'
