@@ -59,7 +59,9 @@ export class AdaptiveCardsService extends AdaptiveCardServiceBase {
                 ChoiceSetInput.from({
                     id: CardInputs.TimeFrame,
                     label: 'Time frame',
+                    defaultValue: '1',
                     choices: [
+                        Choice.from({ title: 'This week', value: '0' }),
                         Choice.from({ title: 'Last week', value: '1' }),
                         Choice.from({ title: 'Two weeks ago', value: '2' }),
                         Choice.from({ title: 'Three weeks ago', value: '3' }),
