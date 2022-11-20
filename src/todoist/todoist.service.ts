@@ -10,8 +10,11 @@ import type { Project, ProjectDataWithCompleted } from './todoist.types'
 export class TodoistService {
     constructor(private readonly syncApiService: SyncApiService) {}
 
-    async getProjectData(projectId: Project['id']): Promise<ProjectDataWithCompleted> {
-        const { start: since, end: until } = getLastWeeksDates()
+    async getProjectData(
+        projectId: Project['id'],
+        weeksAgo: number,
+    ): Promise<ProjectDataWithCompleted> {
+        const { start: since, end: until } = getLastWeeksDates(weeksAgo)
         const projectData = await this.syncApiService.getProject(projectId)
         const completedTasks = await this.syncApiService.getCompletedForProject({
             projectId,
