@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { groupBy } from 'lodash'
+import { Dictionary, groupBy } from 'lodash'
 
 import { isUrl } from '../utils/url-utils'
 
@@ -22,15 +22,22 @@ export class SnippetService {
               )
             : groupBy(projectData.completedTasks, '')
 
+        return `${this.snippets(completedTasksBySection, 'Completed')}${this.snippets(
+            tasksBySection,
+            'In progress',
+        )}`
+    }
+
+    private snippets(completedTasksBySection: Dictionary<Task[]>, heading: string): string {
+        if (Object.keys(completedTasksBySection).length === 0) {
+            return ''
+        }
+
         const completedSnippets = Object.keys(completedTasksBySection)
             .map((x) => this.snippetBySection(completedTasksBySection[x] ?? [], x))
             .join('\r\n')
 
-        const uncompletedSnippets = Object.keys(tasksBySection)
-            .map((section) => this.snippetBySection(tasksBySection[section] ?? [], section))
-            .join('\r\n')
-
-        return `### Completed\r\n${completedSnippets}\r\n\r\n### Uncompleted\r\n${uncompletedSnippets}`
+        return `### ${heading}\r\n${completedSnippets}\r\n\r\n`
     }
 
     private snippetBySection(task: Task[], sectionName: string): string {
