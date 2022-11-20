@@ -24,6 +24,7 @@ export type Task = {
     parent_id?: Task['id']
     child_order: number
     priority: 1 | 2 | 3 | 4
+    task_id?: Task['id']
 }
 
 export type ProjectData = {

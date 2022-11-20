@@ -33,6 +33,24 @@ export class SyncApiService {
         return projectData
     }
 
+    async getArchivedItems(projectId: Project['id']): Promise<Task[]> {
+        const { data: archivedData } = await lastValueFrom(
+            this.httpService.get<{ items: Task[] }>(
+                new URL('archive/items', TODOIST_API_BASE_URL).toString(),
+                {
+                    params: {
+                        project_id: projectId,
+                        limit: 100,
+                    },
+                    headers: {
+                        Authorization: `Bearer ${this.appTokenService.appToken}`,
+                    },
+                },
+            ),
+        )
+        return archivedData.items
+    }
+
     async getCompletedForProject({
         projectId,
         since,

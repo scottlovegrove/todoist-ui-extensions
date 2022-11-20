@@ -4,7 +4,7 @@ import { getLastWeeksDates } from '../utils/date-utils'
 
 import { SyncApiService } from './sync-api.service'
 
-import type { Project, ProjectDataWithCompleted } from './todoist.types'
+import type { Project, ProjectDataWithCompleted, Task } from './todoist.types'
 
 @Injectable()
 export class TodoistService {
@@ -21,6 +21,19 @@ export class TodoistService {
             since,
             until,
         })
-        return { ...projectData, completedTasks }
+        const archivedTasks = await this.syncApiService.getArchivedItems(projectId)
+        return {
+            ...projectData,
+            completedTasks: this.getTaskDetails(completedTasks, archivedTasks),
+        }
+    }
+
+    private getTaskDetails(completedTasks: Task[], archivedTasks: Task[]): Task[] {
+        return completedTasks.map((task) => {
+            const archivedTask = archivedTasks.find(
+                (archivedTask) => archivedTask.id === task.task_id,
+            )
+            return archivedTask ? { ...task, ...archivedTask } : task
+        })
     }
 }

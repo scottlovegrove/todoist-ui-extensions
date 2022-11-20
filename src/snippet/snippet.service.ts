@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { Dictionary, groupBy } from 'lodash'
 
-import { isUrl } from '../utils/url-utils'
+import { getUrl } from '../utils/url-utils'
 
 import type { ProjectDataWithCompleted, Section, Task } from '../todoist/todoist.types'
 
@@ -50,7 +50,8 @@ export class SnippetService {
 
     private snippetByTask(task: Task, requiresIndent: boolean): string {
         const prepend = requiresIndent ? '    - ' : '- '
-        const ref = isUrl(task.description) ? ` ([ref](${task.description}))` : ''
+        const descriptionFromUrl = getUrl(task.description)
+        const ref = descriptionFromUrl ? ` ([ref](${descriptionFromUrl}))` : ''
         return `${prepend}${task.content}${ref}`
     }
 
