@@ -1,5 +1,7 @@
 import {
     ActionSet,
+    Choice,
+    ChoiceSetInput,
     ClipboardAction,
     Container,
     createTextButton,
@@ -10,20 +12,24 @@ import {
 } from '@doist/ui-extensions-core'
 import {
     AdaptiveCardService as AdaptiveCardServiceBase,
+    CardActions,
     pageActions,
     ThemeService,
     TranslationService,
 } from '@doist/ui-extensions-server'
 
 import { Injectable } from '@nestjs/common'
+import dayjs from 'dayjs'
 
 import { SnippetCardAction } from '../actions/action.consts'
 import { SnippetOptions, SnippetService } from '../snippet/snippet.service'
+import { getLastWeeksDates } from '../utils/date-utils'
 
 import type { ProjectDataWithCompleted } from '../todoist/todoist.types'
 
 export enum CardInputs {
     GroupBySection = 'ToggleInput.GroupBySection',
+    TimeFrame = 'ChoiceSetInput.TimeFrame',
 }
 
 @Injectable()
@@ -50,6 +56,16 @@ export class AdaptiveCardsService extends AdaptiveCardServiceBase {
                     defaultValue: String(true),
                     spacing: 'medium',
                 }),
+                ChoiceSetInput.from({
+                    id: CardInputs.TimeFrame,
+                    label: 'Time frame',
+                    choices: [
+                        Choice.from({ title: 'Last week', value: '1' }),
+                        Choice.from({ title: 'Two weeks ago', value: '2' }),
+                        Choice.from({ title: 'Three weeks ago', value: '3' }),
+                        Choice.from({ title: 'Four weeks ago', value: '4' }),
+                    ],
+                }),
                 pageActions(
                     ActionSet.fromWithActions({
                         actions: [
@@ -67,12 +83,17 @@ export class AdaptiveCardsService extends AdaptiveCardServiceBase {
         })
     }
 
-    noTasksCard(): DoistCard {
+    noTasksCard(weeksAgo: number): DoistCard {
+        const { start: since, end: until } = getLastWeeksDates(weeksAgo)
+        function formatDate(date: Date): string {
+            return dayjs(date).format('MMMM D')
+        }
+        const dateRange = `${formatDate(since)} - ${formatDate(until)}`
         return DoistCard.fromWithItems({
             doistCardVersion: '0.6',
             items: [
                 TextBlock.from({
-                    text: 'No tasks found for last week.',
+                    text: `No tasks found for ${dateRange}`,
                     weight: 'bolder',
                     horizontalAlignment: 'center',
                 }),
@@ -80,7 +101,7 @@ export class AdaptiveCardsService extends AdaptiveCardServiceBase {
                     text: 'Try again?',
                     color: 'attention',
                     horizontalAlignment: 'center',
-                    id: SnippetCardAction.GenerateSnippet,
+                    id: CardActions.GoHome,
                 }),
             ],
         })

@@ -33,25 +33,29 @@ export class ActionsService extends ActionsServiceBase {
     @Submit({ actionId: SnippetCardAction.GenerateSnippet })
     async generateSnippet(request: DoistCardRequest<DoistCardAction>): Promise<DoistCardResponse> {
         const { sourceId: projectId } = request.action.params as TodoistContextMenuData
-        const projectData = await this.todoistService.getProjectData(projectId)
+        const { weeksAgo, ...snippetOptions } = this.getOptions(request)
+        const projectData = await this.todoistService.getProjectData(projectId, weeksAgo)
 
         if (projectData.completedTasks.length === 0 && projectData.items.length === 0) {
             return {
-                card: this.adaptiveCardsService.noTasksCard(),
+                card: this.adaptiveCardsService.noTasksCard(weeksAgo),
             }
         }
         return {
             card: this.adaptiveCardsService.snippetPreviewCard({
                 projectData,
-                snippetOptions: this.getSnippetOptions(request),
+                snippetOptions,
             }),
         }
     }
 
-    private getSnippetOptions(request: DoistCardRequest<DoistCardAction>): SnippetOptions {
+    private getOptions(
+        request: DoistCardRequest<DoistCardAction>,
+    ): SnippetOptions & { weeksAgo: number } {
         const { inputs } = request.action
         return {
             groupBySection: inputs?.[CardInputs.GroupBySection] === 'true',
+            weeksAgo: Number(inputs?.[CardInputs.TimeFrame] ?? 1),
         }
     }
 }

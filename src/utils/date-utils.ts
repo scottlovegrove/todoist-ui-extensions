@@ -8,10 +8,10 @@ type LastWeek = {
     end: Date
 }
 
-export function getLastWeeksDates(): LastWeek {
+export function getLastWeeksDates(weeksAgo = 1): LastWeek {
     const today = dayjs()
-    const startOfLastWeek = today.startOf('isoWeek').subtract(1, 'week')
-    const endOfLastWeek = today.endOf('isoWeek').subtract(1, 'week')
+    const startOfLastWeek = today.startOf('isoWeek').subtract(weeksAgo, 'week')
+    const endOfLastWeek = today.endOf('isoWeek').subtract(weeksAgo, 'week')
     return {
         start: startOfLastWeek.toDate(),
         end: endOfLastWeek.toDate(),
