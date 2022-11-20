@@ -2,7 +2,7 @@ import { ActionsService as ActionsServiceBase, Submit } from '@doist/ui-extensio
 
 import { Injectable } from '@nestjs/common'
 
-import { AdaptiveCardsService } from '../adaptivecards/adaptivecards.service'
+import { AdaptiveCardsService, CardInputs } from '../adaptivecards/adaptivecards.service'
 import { TodoistService } from '../todoist/todoist.service'
 
 import { SnippetCardAction } from './action.consts'
@@ -13,6 +13,7 @@ import type {
     DoistCardResponse,
     TodoistContextMenuData,
 } from '@doist/ui-extensions-core'
+import type { SnippetOptions } from '../snippet/snippet.service'
 
 @Injectable()
 export class ActionsService extends ActionsServiceBase {
@@ -40,7 +41,17 @@ export class ActionsService extends ActionsServiceBase {
             }
         }
         return {
-            card: this.adaptiveCardsService.snippetPreviewCard({ projectData }),
+            card: this.adaptiveCardsService.snippetPreviewCard({
+                projectData,
+                snippetOptions: this.getSnippetOptions(request),
+            }),
+        }
+    }
+
+    private getSnippetOptions(request: DoistCardRequest<DoistCardAction>): SnippetOptions {
+        const { inputs } = request.action
+        return {
+            groupBySection: inputs?.[CardInputs.GroupBySection] === 'true',
         }
     }
 }

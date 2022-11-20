@@ -18,7 +18,7 @@ import {
 import { Injectable } from '@nestjs/common'
 
 import { SnippetCardAction } from '../actions/action.consts'
-import { SnippetService } from '../snippet/snippet.service'
+import { SnippetOptions, SnippetService } from '../snippet/snippet.service'
 
 import type { ProjectDataWithCompleted } from '../todoist/todoist.types'
 
@@ -57,6 +57,7 @@ export class AdaptiveCardsService extends AdaptiveCardServiceBase {
                                 id: SnippetCardAction.GenerateSnippet,
                                 title: 'Generate snippet',
                                 style: 'positive',
+                                loadingText: 'Generating snippet...',
                             }),
                         ],
                     }),
@@ -71,7 +72,7 @@ export class AdaptiveCardsService extends AdaptiveCardServiceBase {
             doistCardVersion: '0.6',
             items: [
                 TextBlock.from({
-                    text: 'No tasks found',
+                    text: 'No tasks found for last week.',
                     weight: 'bolder',
                     horizontalAlignment: 'center',
                 }),
@@ -85,8 +86,14 @@ export class AdaptiveCardsService extends AdaptiveCardServiceBase {
         })
     }
 
-    snippetPreviewCard({ projectData }: { projectData: ProjectDataWithCompleted }): DoistCard {
-        const snippet = this.snippetService.createSnippet(projectData)
+    snippetPreviewCard({
+        projectData,
+        snippetOptions,
+    }: {
+        projectData: ProjectDataWithCompleted
+        snippetOptions: SnippetOptions
+    }): DoistCard {
+        const snippet = this.snippetService.createSnippet(projectData, snippetOptions)
         return DoistCard.fromWithItems({
             doistCardVersion: '0.6',
             items: [
