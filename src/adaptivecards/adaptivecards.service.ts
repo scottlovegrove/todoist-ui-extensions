@@ -151,6 +151,7 @@ export class AdaptiveCardsService extends AdaptiveCardServiceBase {
                         TextBlock.from({
                             text: snippet,
                             spacing: 'medium',
+                            wrap: true,
                         }),
                     ],
                 }),
