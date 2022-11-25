@@ -1,20 +1,43 @@
 import { Injectable } from '@nestjs/common'
+import dayjs from 'dayjs'
 import { Dictionary, groupBy } from 'lodash'
 
+import { getLastWeeksDates } from '../utils/date-utils'
 import { getUrl } from '../utils/url-utils'
 
 import type { ProjectDataWithCompleted, Section, Task } from '../todoist/todoist.types'
 
 export type SnippetOptions = {
     groupBySection?: boolean
+    weeksAgo: number
+}
+declare global {
+    interface Array<T> {
+        filterNewTasks(weeksAgo: number): Array<T>
+        filterTasksByLabel(label: string): Array<T>
+    }
+}
+
+Array.prototype.filterNewTasks = function (this: Task[], weeksAgo: number): Task[] {
+    const { end: until } = getLastWeeksDates(weeksAgo)
+    const untilDay = dayjs(until)
+    return this.filter((task) => !dayjs(task.added_at).isAfter(untilDay))
+}
+
+Array.prototype.filterTasksByLabel = function (this: Task[], label: string): Task[] {
+    return this.filter((task) => task.labels.some((taskLabel) => taskLabel !== label))
 }
 
 @Injectable()
 export class SnippetService {
-    createSnippet(projectData: ProjectDataWithCompleted, options: SnippetOptions = {}): string {
+    createSnippet(
+        projectData: ProjectDataWithCompleted,
+        options: SnippetOptions = { weeksAgo: 1 },
+    ): string {
+        const filteredTasks = this.applyFilters(projectData.items, options.weeksAgo)
         const tasksBySection = options.groupBySection
-            ? groupBy(projectData.items, (x) => this.getSectionName(x, projectData.sections))
-            : groupBy(projectData.items, '')
+            ? groupBy(filteredTasks, (x) => this.getSectionName(x, projectData.sections))
+            : groupBy(filteredTasks, '')
 
         const completedTasksBySection = options.groupBySection
             ? groupBy(projectData.completedTasks, (x) =>
@@ -26,6 +49,10 @@ export class SnippetService {
             tasksBySection,
             'In progress',
         )}`
+    }
+
+    private applyFilters(tasks: Task[], weeksAgo: number): Task[] {
+        return tasks.filterNewTasks(weeksAgo).filterTasksByLabel('not-ready')
     }
 
     private snippets(completedTasksBySection: Dictionary<Task[]>, heading: string): string {

@@ -26,6 +26,7 @@ export type Task = {
     priority: 1 | 2 | 3 | 4
     task_id?: Task['id']
     added_at?: Date
+    labels: string[]
 }
 
 export type ProjectData = {

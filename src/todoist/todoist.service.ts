@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common'
-import dayjs from 'dayjs'
 
 import { getLastWeeksDates } from '../utils/date-utils'
 
@@ -25,14 +24,8 @@ export class TodoistService {
         const archivedTasks = await this.syncApiService.getArchivedItems(projectId)
         return {
             ...projectData,
-            items: this.filterNewerTasks(projectData.items, until),
             completedTasks: this.getTaskDetails(completedTasks, archivedTasks),
         }
-    }
-
-    private filterNewerTasks(tasks: Task[], until: Date): Task[] {
-        const untilDay = dayjs(until)
-        return tasks.filter((task) => !dayjs(task.added_at).isAfter(untilDay))
     }
 
     private getTaskDetails(completedTasks: Task[], archivedTasks: Task[]): Task[] {
