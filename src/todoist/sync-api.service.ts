@@ -6,7 +6,12 @@ import { lastValueFrom } from 'rxjs'
 
 import { TODOIST_API_BASE_URL } from './todoist.consts'
 
-import type { Project, ProjectData, Task } from './todoist.types'
+import type { Project, ProjectData, Section, Task } from './todoist.types'
+
+type ArchivedRequest = {
+    projectId?: Project['id']
+    sectionId?: Section['id']
+}
 
 @Injectable()
 export class SyncApiService {
@@ -33,13 +38,14 @@ export class SyncApiService {
         return projectData
     }
 
-    async getArchivedItems(projectId: Project['id']): Promise<Task[]> {
+    async getArchivedItems({ projectId, sectionId }: ArchivedRequest): Promise<Task[]> {
         const { data: archivedData } = await lastValueFrom(
             this.httpService.get<{ items: Task[] }>(
                 new URL('archive/items', TODOIST_API_BASE_URL).toString(),
                 {
                     params: {
                         project_id: projectId,
+                        section_id: sectionId,
                         limit: 100,
                     },
                     headers: {

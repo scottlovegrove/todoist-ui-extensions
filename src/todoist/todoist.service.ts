@@ -16,12 +16,21 @@ export class TodoistService {
     ): Promise<ProjectDataWithCompleted> {
         const { start: since, end: until } = getLastWeeksDates(weeksAgo)
         const projectData = await this.syncApiService.getProject(projectId)
+
         const completedTasks = await this.syncApiService.getCompletedForProject({
             projectId,
             since,
             until,
         })
-        const archivedTasks = await this.syncApiService.getArchivedItems(projectId)
+        const promises = [
+            this.syncApiService.getArchivedItems({ projectId }),
+            ...projectData.sections.map((section) =>
+                this.syncApiService.getArchivedItems({ sectionId: section.id }),
+            ),
+        ]
+
+        const responses = await Promise.all(promises)
+        const archivedTasks = responses.flat()
         return {
             ...projectData,
             completedTasks: this.getTaskDetails(completedTasks, archivedTasks),
