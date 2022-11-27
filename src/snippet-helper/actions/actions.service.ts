@@ -2,8 +2,8 @@ import { ActionsService as ActionsServiceBase, Submit } from '@doist/ui-extensio
 
 import { Injectable } from '@nestjs/common'
 
+import { TodoistService } from '../../todoist/todoist.service'
 import { AdaptiveCardsService, CardInputs } from '../adaptivecards/adaptivecards.service'
-import { TodoistService } from '../todoist/todoist.service'
 
 import { SnippetCardAction } from './action.consts'
 
@@ -24,6 +24,7 @@ export class ActionsService extends ActionsServiceBase {
         super()
     }
 
+    @Submit({ actionId: SnippetCardAction.Initial })
     getInitialView(_request: DoistCardRequest<DoistCardAction>): Promise<DoistCardResponse> {
         return Promise.resolve({
             card: this.adaptiveCardsService.homeCard(),

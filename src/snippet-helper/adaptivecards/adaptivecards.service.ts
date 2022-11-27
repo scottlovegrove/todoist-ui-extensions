@@ -25,11 +25,11 @@ import {
 import { Injectable } from '@nestjs/common'
 import dayjs from 'dayjs'
 
+import { getLastWeeksDates } from '../../utils/date-utils'
 import { SnippetCardAction } from '../actions/action.consts'
 import { SnippetOptions, SnippetService } from '../snippet/snippet.service'
-import { getLastWeeksDates } from '../utils/date-utils'
 
-import type { ProjectDataWithCompleted } from '../todoist/todoist.types'
+import type { ProjectDataWithCompleted } from '../../todoist/todoist.types'
 
 export enum CardInputs {
     GroupBySection = 'ToggleInput.GroupBySection',

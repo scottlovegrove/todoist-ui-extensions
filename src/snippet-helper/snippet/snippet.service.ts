@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common'
 import dayjs from 'dayjs'
 import { Dictionary, groupBy } from 'lodash'
 
-import { getLastWeeksDates } from '../utils/date-utils'
-import { getUrl } from '../utils/url-utils'
+import { getLastWeeksDates } from '../../utils/date-utils'
+import { getUrl } from '../../utils/url-utils'
 
-import type { ProjectDataWithCompleted, Section, Task } from '../todoist/todoist.types'
+import type { ProjectDataWithCompleted, Section, Task } from '../../todoist/todoist.types'
 
 export type SnippetOptions = {
     groupBySection?: boolean

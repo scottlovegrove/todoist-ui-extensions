@@ -1,21 +1,20 @@
-import { ActionsService as ActionsServiceBase } from '@doist/ui-extensions-server'
+import { ActionsService } from '@doist/ui-extensions-server'
 
 import { Module } from '@nestjs/common'
 
-import { AdaptiveCardsModule } from '../adaptivecards/adaptivecards.module'
-import { TodoistModule } from '../todoist/todoist.module'
+import { ActionsModule as SnippetActionsModule } from '../snippet-helper/actions/actions.module'
 
-import { ActionsService } from './actions.service'
+import { DummyActionService } from './dummy-action.service'
 
 @Module({
-    imports: [AdaptiveCardsModule, TodoistModule],
+    imports: [SnippetActionsModule],
     providers: [
-        ActionsService,
+        DummyActionService,
         {
-            provide: ActionsServiceBase,
-            useExisting: ActionsService,
+            provide: ActionsService,
+            useExisting: DummyActionService,
         },
     ],
-    exports: [ActionsService, ActionsServiceBase],
+    exports: [ActionsService, SnippetActionsModule],
 })
 export class ActionsModule {}
