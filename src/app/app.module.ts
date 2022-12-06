@@ -10,12 +10,17 @@ import {
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 
 import { ActionsModule } from '../actions/actions.module'
+import { MarkAsCompleteCardAction } from '../mark-as-read/actions/action.consts'
 import { SnippetCardAction } from '../snippet-helper/actions/action.consts'
 
 const workflowInitialActionMap: WorkflowInitialActionMap = {
     'snippet-helper': {
         actionType: 'submit',
         actionId: SnippetCardAction.Initial,
+    },
+    'mark-as-complete': {
+        actionType: 'submit',
+        actionId: MarkAsCompleteCardAction.Initial,
     },
 }
 

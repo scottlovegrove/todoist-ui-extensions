@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto'
+
 import { AppTokenService } from '@doist/ui-extensions-server'
 
 import { HttpService } from '@nestjs/axios'
@@ -83,5 +85,33 @@ export class SyncApiService {
             ),
         )
         return completedData.items
+    }
+
+    async markTasksAsCompleted(tasks: Task[]): Promise<void> {
+        await lastValueFrom(
+            this.httpService.post(
+                new URL('sync', TODOIST_API_BASE_URL).toString(),
+                {
+                    commands: this.createTaskCompleteCommands(tasks),
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${this.appTokenService.appToken}`,
+                    },
+                },
+            ),
+        )
+    }
+
+    private createTaskCompleteCommands(
+        tasks: Task[],
+    ): { type: 'item_complete'; uuid: string; args: { id: Task['id'] } }[] {
+        return tasks.map((task) => ({
+            type: 'item_complete',
+            uuid: randomUUID(),
+            args: {
+                id: task.id,
+            },
+        }))
     }
 }

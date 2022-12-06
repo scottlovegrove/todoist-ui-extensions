@@ -37,6 +37,17 @@ export class TodoistService {
         }
     }
 
+    async markProjectAsCompleted(
+        projectId: Project['id'],
+        includeSections: boolean,
+    ): Promise<void> {
+        const projectData = await this.syncApiService.getProject(projectId)
+        const tasks = includeSections
+            ? projectData.items
+            : projectData.items.filter((task) => !task.section_id)
+        await this.syncApiService.markTasksAsCompleted(tasks)
+    }
+
     private getTaskDetails(completedTasks: Task[], archivedTasks: Task[]): Task[] {
         return completedTasks.map((task) => {
             const archivedTask = archivedTasks.find(
