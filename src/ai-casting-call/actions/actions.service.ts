@@ -20,6 +20,8 @@ import type {
 } from '@doist/ui-extensions-core'
 import type { Task } from '../../todoist/todoist.types'
 
+const EPISODE_BACKLOG_SECTION_ID = '125129858'
+
 @Injectable()
 export class ActionsService extends ActionsServiceBase {
     constructor(
@@ -68,30 +70,34 @@ export class ActionsService extends ActionsServiceBase {
             labels: ['ai-casting-call'],
             project_id: projectId,
             id: randomUUID(),
+            section_id: EPISODE_BACKLOG_SECTION_ID,
         }
 
         const recordedTask: Partial<Task> = {
             content: 'Record episde',
-            labels: ['ai-casting-call'],
+            labels: ['ai-casting-call', 'ai-casting-call-record'],
             project_id: projectId,
             parent_id: parentTask.id,
             id: randomUUID(),
+            section_id: EPISODE_BACKLOG_SECTION_ID,
         }
 
         const editTask: Partial<Task> = {
             content: 'Edit episode',
-            labels: ['ai-casting-call'],
+            labels: ['ai-casting-call', 'ai-casting-call-edit'],
             project_id: projectId,
             parent_id: parentTask.id,
             id: randomUUID(),
+            section_id: EPISODE_BACKLOG_SECTION_ID,
         }
 
         const publishTask: Partial<Task> = {
             content: 'Publish episode',
-            labels: ['ai-casting-call'],
+            labels: ['ai-casting-call', 'ai-casting-call-publish'],
             project_id: projectId,
             parent_id: parentTask.id,
             id: randomUUID(),
+            section_id: EPISODE_BACKLOG_SECTION_ID,
         }
 
         return [parentTask, recordedTask, editTask, publishTask]
