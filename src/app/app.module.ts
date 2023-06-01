@@ -10,6 +10,7 @@ import {
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 
 import { ActionsModule } from '../actions/actions.module'
+import { AICastingCallAction } from '../ai-casting-call/actions/action.consts'
 import { MarkAsCompleteCardAction } from '../mark-as-read/actions/action.consts'
 import { SnippetCardAction } from '../snippet-helper/actions/action.consts'
 
@@ -21,6 +22,10 @@ const workflowInitialActionMap: WorkflowInitialActionMap = {
     'mark-as-complete': {
         actionType: 'submit',
         actionId: MarkAsCompleteCardAction.Initial,
+    },
+    'ai-casting-call': {
+        actionType: 'submit',
+        actionId: AICastingCallAction.Initial,
     },
 }
 

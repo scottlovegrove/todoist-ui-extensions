@@ -103,6 +103,35 @@ export class SyncApiService {
         )
     }
 
+    async addTasks(tasks: Partial<Task>[]): Promise<void> {
+        await lastValueFrom(
+            this.httpService.post(
+                new URL('sync', TODOIST_API_BASE_URL).toString(),
+                {
+                    commands: this.createTaskAddCommands(tasks),
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${this.appTokenService.appToken}`,
+                    },
+                },
+            ),
+        )
+    }
+
+    private createTaskAddCommands(
+        tasks: Partial<Task>[],
+    ): { type: 'item_add'; uuid: string; temp_id: string; args: Partial<Task> }[] {
+        return tasks.map((task) => ({
+            type: 'item_add',
+            uuid: randomUUID(),
+            temp_id: task.id ?? randomUUID(),
+            args: {
+                ...task,
+            },
+        }))
+    }
+
     private createTaskCompleteCommands(
         tasks: Task[],
     ): { type: 'item_complete'; uuid: string; args: { id: Task['id'] } }[] {
