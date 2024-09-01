@@ -11,6 +11,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 
 import { ActionsModule } from '../actions/actions.module'
 import { AICastingCallAction } from '../ai-casting-call/actions/action.consts'
+import { CoventryModule } from '../coventry/coventry.module'
 import { MarkAsCompleteCardAction } from '../mark-as-read/actions/action.consts'
 import { SnippetCardAction } from '../snippet-helper/actions/action.consts'
 
@@ -38,6 +39,7 @@ const workflowInitialActionMap: WorkflowInitialActionMap = {
             },
         }),
         ActionsModule,
+        CoventryModule,
     ],
     controllers: [AppController],
 })
