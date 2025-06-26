@@ -6,7 +6,7 @@ import ical, { type VCalendar, type VEvent } from 'node-ical'
 import { lastValueFrom } from 'rxjs'
 
 const COVENTRY_FIXTURES_URL =
-    'https://calendar.google.com/calendar/ical/djlidj96t1u5h3b4cd1l1qfmrk%40group.calendar.google.com/private-a03a57c76547ba93c8ec576733646f45/basic.ics'
+    'https://calendar.google.com/calendar/ical/0505759b2e4966d9d7f1b007850c30f25b39d05291c496386826f20bcae82cb1%40group.calendar.google.com/private-e39529b986ad176bc2b12a3f35c5fd73/basic.ics'
 
 @Controller('coventry')
 export class CoventryController {
