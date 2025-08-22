@@ -89,7 +89,7 @@
         "@doist/ui-extensions-core": "4.1.2",
         "@doist/ui-extensions-server": "3.2.1",
         "@nestjs/axios": "0.1.1",
-        "@nestjs/common": "9.2.1",
+        "@nestjs/common": "10.4.16",
         "@nestjs/config": "2.3.1",
         "@nestjs/core": "9.2.1",
         "@nestjs/platform-express": "9.2.1",
