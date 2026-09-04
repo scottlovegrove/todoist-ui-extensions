@@ -62,7 +62,7 @@
         "dotenv": "16.0.3",
         "eslint": "8.35.0",
         "eslint-config-prettier": "8.10.2",
-        "eslint-import-resolver-webpack": "0.13.10",
+        "eslint-import-resolver-webpack": "0.13.11",
         "eslint-plugin-import": "2.32.0",
         "eslint-plugin-prettier": "4.2.5",
         "husky": "8.0.3",
